@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sewa Express - Advanced News Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+    }
+
+    /* Breaking News Banner */
+    .breaking-news {
+      background: linear-gradient(135deg, #dc2626, #ea580c, #d97706);
+      color: white;
+      overflow: hidden;
+      position: relative;
+      height: 45px;
+      display: flex;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .breaking-news::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+      animation: shimmer 3s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .breaking-scroll {
+      display: flex;
+      animation: scroll 30s linear infinite;
+      white-space: nowrap;
+      gap: 60px;
+    }
+
+    @keyframes scroll {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .breaking-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .breaking-label {
+      background: rgba(255,255,255,0.2);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* Top Bar */
+    .top-bar {
+      background: #1e293b;
+      color: white;
+      padding: 12px 0;
+      border-bottom: 1px solid #334155;
+    }
+
+    .top-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .top-left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      font-size: 13px;
+    }
+
+    .top-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      opacity: 0.9;
+    }
+
+    .top-item i {
+      color: #f97316;
+    }
+
+    .currency {
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .top-right {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .lang-switcher {
+      display: flex;
+      background: rgba(255,255,255,0.1);
+      border-radius: 25px;
+      overflow: hidden;
+    }
+
+    .lang-btn {
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: none;
+      background: transparent;
+      color: white;
+    }
+
+    .lang-btn.active {
+      background: #f97316;
+      color: white;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .social-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+      text-decoration: none;
+      color: white;
+    }
+
+    .social-icon:hover {
+      transform: translateY(-3px) scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .facebook { background: #1877f2; }
+    .twitter { background: #1DA1F2; }
+    .youtube { background: #ff0000; }
+
+    /* Header */
+    .header {
+      background: white;
+      padding: 20px 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      position: relative;
+      z-index: 50;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-decoration: none;
+      font-size: 24px;
+      font-weight: bold;
+      box-shadow: 0 4px 8px rgba(249, 115, 22, 0.2);
+    }
+
+    .brand-text h1 {
+      font-size: 28px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #1e293b, #475569);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: -5px;
+    }
+
+    .brand-text p {
+      font-size: 12px;
+      color: #64748b;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      padding: 12px 45px 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 25px;
+      width: 300px;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      background: #f8fafc;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #f97316;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    }
+
+    .search-btn {
+      position: absolute;
+      right: 12px;
+      background: #f97316;
+      color: white;
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+      background: #ea580c;
+      transform: scale(1.05);
+    }
+
+    /* Navigation */
+    .navigation {
+      background: white;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      margin-right: 15px;
+    }
+    
+    .nav-logo .logo-small {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 2px 5px rgba(249, 115, 22, 0.2);
+    }
+
+    .nav-menu {
+      display: flex;
+      flex: 1;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      padding: 0;
+    }
+
+    .nav-menu::-webkit-scrollbar {
+      display: none;
+    }
+
+    .nav-item {
+      text-decoration: none;
+      color: #475569;
+      font-weight: 600;
+      padding: 18px 24px;
+      transition: all 0.3s ease;
+      position: relative;
+      white-space: nowrap;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      color: #f97316;
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.05), rgba(234, 88, 12, 0.05));
+    }
+
+    .nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+      border-radius: 2px 2px 0 0;
+    }
+
+    /* Mobile Menu Toggle */
+    .mobile-toggle {
+      display: none;
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #1e293b;
+      padding: 10px;
+    }
+
+
+
+    /* Footer */
+    .footer {
+      background: #1e293b;
+      color: #cbd5e1;
+      padding: 50px 0 20px;
+      margin-top: 60px;
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .footer-logo .logo {
+      width: 50px;
+      height: 50px;
+      font-size: 20px;
+    }
+
+    .footer-logo h2 {
+      font-size: 24px;
+      color: white;
+      font-weight: 700;
+    }
+
+    .footer-about {
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .footer-title {
+      font-size: 18px;
+      color: white;
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(135deg, #f97316, #ea580c);
+    }
+
+    .footer-links {
+      list-style: none;
+    }
+
+    .footer-link {
+      padding: 8px 0;
+      border-bottom: 1px solid #334155;
+    }
+
+    .footer-link a {
+      color: #94a3b8;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: block;
+    }
+
+    .footer-link a:hover {
+      color: #f97316;
+      transform: translateX(5px);
+    }
+
+    .footer-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .contact-item i {
+      color: #f97316;
+      font-size: 18px;
+      margin-top: 4px;
+    }
+
+    .copyright {
+      text-align: center;
+      padding-top: 30px;
+      margin-top: 40px;
+      border-top: 1px solid #334155;
+      font-size: 14px;
+      color: #94a3b8;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .search-input {
+        width: 200px;
+      }
+      
+      .nav-item {
+        padding: 18px 18px;
+        font-size: 14px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .top-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+      }
+
+      .top-left {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 15px;
+      }
+
+      .top-right {
+        justify-content: center;
+      }
+      
+      .mobile-toggle {
+        display: block;
+      }
+      
+      .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s ease;
+        box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+      }
+      
+      .nav-menu.active {
+        max-height: 500px;
+        overflow-y: auto;
+      }
+      
+      .nav-item {
+        width: 100%;
+        padding: 15px 20px;
+        border-bottom: 1px solid #f1f5f9;
+      }
+      
+      .nav-item.active::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        flex-direction: column;
+        gap: 20px;
+      }
+      
+      .search-input {
+        width: 100%;
+        max-width: 300px;
+      }
+      
+      .hero-title {
+        font-size: 28px;
+      }
+      
+      .hero-subtitle {
+        font-size: 16px;
+      }
+      
+      .news-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .breaking-item {
+        font-size: 12px;
+      }
+      
+      .hero-title {
+        font-size: 24px;
+      }
+      
+      .top-item {
+        font-size: 12px;
+      }
+      
+      .brand-text h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Breaking News -->
+  <div class="breaking-news">
+    <div class="breaking-scroll">
+      <div class="breaking-item">
+        <span class="breaking-label">BREAKING</span>
+        Prime Minister announces new economic policies for 2025
+      </div>
+      <div class="breaking-item">
+        <span class="breaking-label">LIVE</span>
+        Nepal wins against India in cricket match
+      </div>
+      <div class="breaking-item">
+        <span class="breaking-label">EXCLUSIVE</span>
+        Tech summit attracts international investors to Nepal
+      </div>
+      <div class="breaking-item">
+        <span class="breaking-label">UPDATE</span>
+        New highway construction begins in western region
+      </div>
+      <div class="breaking-item">
+        <span class="breaking-label">ALERT</span>
+        Weather advisory issued for mountainous regions
+      </div>
+    </div>
+  </div>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-container">
+      <div class="top-left">
+        <div class="top-item">
+          <i class="fas fa-calendar-alt"></i>
+          <span id="date">Saturday, May 31, 2025</span>
+        </div>
+        <div class="top-item">
+          <i class="fas fa-clock"></i>
+          <span id="time">18:51:00 NPT</span>
+        </div>
+        <div class="top-item">
+          <i class="fas fa-cloud-sun"></i>
+          Kathmandu: 22°C
+        </div>
+        <div class="top-item currency">
+          <i class="fas fa-dollar-sign" style="color: whitesmoke;"></i>
+          USD/NPR: 134.50
+        </div>
+      </div>
+      
+      <div class="top-right">
+        <div class="lang-switcher">
+          <button class="lang-btn active">EN</button>
+          <button class="lang-btn">ने</button>
+        </div>
+        
+        <div class="social-icons">
+          <a href="https://facebook.com/sewaexpress" target="_blank" class="social-icon facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://twitter.com/sewaexpress" target="_blank" class="social-icon twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="https://youtube.com/sewaexpress" target="_blank" class="social-icon youtube">
+            <i class="fab fa-youtube"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-container">
+      <div class="logo-section">
+        <div class="logo">SE</div>
+        <div class="brand-text">
+          <h1>SEWA EXPRESS</h1>
+          <p>Truth in Every Word</p>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <div class="search-box">
+          <input type="text" class="search-input" placeholder="Search news, topics, authors...">
+          <button class="search-btn">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="navigation">
+    <div class="nav-container">
+      
+      
+      <button class="mobile-toggle" id="mobileToggle">
+        <i class="fas fa-bars"></i>
+      </button>
+      
+      <div class="nav-menu" id="navMenu">
+        <a href="index.html" class="nav-item active">गृहपृष्ठ</a>
+        <a href="politics.html" class="nav-item">राजनीति</a>
+        <a href="business.html" class="nav-item">व्यवसाय</a>
+        <a href="sport.html" class="nav-item">खेलकुद</a>
+        <a href="inter.html" class="nav-item">अन्तर्राष्ट्रिय</a>
+        <a href="tech.html" class="nav-item">प्रविधि</a>
+        <a href="opinion.html" class="nav-item">विचार</a>
+        <a href="ee.html" class="nav-item">मनोरञ्जन</a>
+        <a href="health.html" class="nav-item">स्वास्थ्य</a>
+        <a href="education.html" class="nav-item">शिक्षा</a>
+        <a href="krish.html" class="nav-item">कृषि</a>
+        <a href="local.html" class="nav-item">स्थानीय</a>
+      </div>
+    </div>
+  </nav>
+
+  
+ 
+ 
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-about">
+        <div class="footer-logo">
+          <div class="logo">SE</div>
+          <h2>SEWA EXPRESS</h2>
+        </div>
+        <p class="footer-about">Sewa Express is Nepal's leading digital news platform committed to delivering accurate, timely, and comprehensive news coverage across all domains.</p>
+        <div class="social-icons">
+          <a href="https://facebook.com/sewaexpress" target="_blank" class="social-icon facebook">
+            <i class="fab fa-facebook-f"></i>
+          </a>
+          <a href="https://twitter.com/sewaexpress" target="_blank" class="social-icon twitter">
+            <i class="fab fa-twitter"></i>
+          </a>
+          <a href="https://youtube.com/sewaexpress" target="_blank" class="social-icon youtube">
+            <i class="fab fa-youtube"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="footer-title">Quick Links</h3>
+        <ul class="footer-links">
+          <li class="footer-link"><a href="index.html">Home</a></li>
+          <li class="footer-link"><a href="politics.html">Politics</a></li>
+          <li class="footer-link"><a href="business.html">Business</a></li>
+          <li class="footer-link"><a href="sport.html">Sports</a></li>
+          <li class="footer-link"><a href="inter.html">International</a></li>
+          <li class="footer-link"><a href="tech.html">Technology</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="footer-title">Categories</h3>
+        <ul class="footer-links">
+          <li class="footer-link"><a href="opinion.html">Opinion</a></li>
+          <li class="footer-link"><a href="ee.html">Entertainment</a></li>
+          <li class="footer-link"><a href="health.html">Health</a></li>
+          <li class="footer-link"><a href="education.html">Education</a></li>
+          <li class="footer-link"><a href="krish.html">Agriculture</a></li>
+          <li class="footer-link"><a href="local.html">Local</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="footer-title">Contact Us</h3>
+        <div class="footer-contact">
+          <div class="contact-item">
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Nawalpur, Nepal</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-phone-alt"></i>
+            <span>+977-***********</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-envelope"></i>
+            <span>everesttech157@gmail.com</span>
+          </div>
+          <div class="contact-item">
+            <i class="fas fa-globe"></i>
+            <span>sewaexpress</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      &copy; 2025 Sewa Express. All Rights Reserved. | Designed & Developed by Himal Shahi Thakuri❤️ 
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script>
+    // Update time function
+    function updateTime() {
+      const timeEl = document.getElementById("time");
+      const dateEl = document.getElementById("date");
+      const now = new Date();
+      
+      const timeOptions = { 
+        hour: '2-digit', 
+        minute: '2-digit', 
+        second: '2-digit', 
+        hour12: false 
+      };
+      
+      const dateOptions = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      };
+      
+      timeEl.textContent = now.toLocaleTimeString('en-GB', timeOptions) + ' NPT';
+      dateEl.textContent = now.toLocaleDateString('en-US', dateOptions);
+    }
+    
+    // Update time every second
+    setInterval(updateTime, 1000);
+    updateTime();
+
+    // Language switcher functionality
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+   
+
+    // Mobile menu toggle
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navMenu = document.getElementById('navMenu');
+    
+    mobileToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+      const icon = mobileToggle.querySelector('i');
+      if (navMenu.classList.contains('active')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+
+    // Search functionality
+    document.querySelector('.search-btn').addEventListener('click', function() {
+      const searchTerm = document.querySelector('.search-input').value;
+      if (searchTerm.trim()) {
+        alert(`Searching for: ${searchTerm}`);
+      }
+    });
+
+    document.querySelector('.search-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        const searchTerm = this.value;
+        if (searchTerm.trim()) {
+          alert(`Searching for: ${searchTerm}`);
+        }
+      }
+    });
+
+    // Smooth scrolling for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
+      });
+    });
+
+    // Auto-refresh news ticker
+    function refreshBreakingNews() {
+      const breakingNews = [
+        { label: 'BREAKING', text: 'Prime Minister announces new economic policies for 2025' },
+        { label: 'LIVE', text: 'Nepal wins against India in cricket match' },
+        { label: 'EXCLUSIVE', text: 'Tech summit attracts international investors to Nepal' },
+        { label: 'UPDATE', text: 'New highway construction begins in western region' },
+        { label: 'ALERT', text: 'Weather advisory issued for mountainous regions' }
+      ];
+      
+      const scrollContainer = document.querySelector('.breaking-scroll');
+      scrollContainer.innerHTML = breakingNews.map(item => 
+        `<div class="breaking-item">
+          <span class="breaking-label">${item.label}</span>
+          ${item.text}
+        </div>`
+      ).join('');
+    }
+    
+    refreshBreakingNews();
+
+  </script>
+
+</body>
+</html>
